@@ -52,4 +52,12 @@
             description: "Interface en IP statique"
             enabled: true
         state: merged
-    
+
+    - name: configuration DHCP
+      cisco.ios.ios_config:
+        lines:
+          - ip dhcp pool SERVEUR
+          - network 192.168.2.0 255.255.255.0
+          - dns-server 8.8.8.8
+          - default-router 192.168.2.1 255.255.255.0
+        before: no ip dhcp pool SERVEUR

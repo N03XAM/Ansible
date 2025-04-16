@@ -53,11 +53,35 @@
             enabled: true
         state: merged
 
+    - name: Supression du DHCP
+      cisco.ios.ios_config:
+        lines:
+          - no ip dhcp pool SERVEUR
+
     - name: configuration DHCP
       cisco.ios.ios_config:
         lines:
           - ip dhcp pool SERVEUR
           - network 192.168.2.0 255.255.255.0
           - dns-server 8.8.8.8
-          - default-router 192.168.2.1 255.255.255.0
-        before: no ip dhcp pool SERVEUR
+          - default-router 192.168.2.1 255.255.255.0          
+    
+    - name: configuration NAT sortie
+      cisco.ios.ios_config:
+        lines:
+          - ip nat outside
+        parents: interface GigabitEthernet1
+
+    - name: configuration NAT entrée
+      cisco.ios.ios_config:
+        lines:
+          - int range GigabitEthernet2-4
+          - ip nat inside
+
+    - name: Activation du NAT
+      cisco.ios.ios_config:
+        lines:
+          - access-list 1 permit 192.168.2.0 0.0.0.255
+          - ip nat inside source list 1 interface GigabitEthernet1 overload
+
+

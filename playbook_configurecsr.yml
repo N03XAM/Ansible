@@ -75,8 +75,12 @@
     - name: configuration NAT entrée
       cisco.ios.ios_config:
         lines:
-          - int range GigabitEthernet2-4
           - ip nat inside
+        parents: interface {{ item }}
+      loop:
+        - GigabitEthernet2
+        - GigabitEthernet3
+        - GigabitEthernet4
 
     - name: Activation du NAT
       cisco.ios.ios_config:

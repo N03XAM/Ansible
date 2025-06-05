@@ -85,7 +85,24 @@
     - name: Activation du NAT
       cisco.ios.ios_config:
         lines:
-          - access-list 1 permit 192.168.2.0 0.0.0.255
-          - ip nat inside source list 1 interface GigabitEthernet1 overload
+          - access-list 1 permit {{ item.ip }} 0.0.0.255
+          - ip nat inside source list {{ item.numero_list }} interface {{ item.interface }} overload
+      loop:
+        - ip: 192.168.103.0
+          numero_list: 1
+          interface: GigabitEthernet1
+          
+        - ip: 192.168.2.0
+          numero_list: 2
+          interface: GigabitEthernet2
+          
+        - ip: 192.168.3.0
+          numero_list: 3
+          interface: GigabitEthernet3
+          
+        - ip: 192.168.4.0
+          numero_list: 4
+          interface: GigabitEthernet4
+           
 
 
